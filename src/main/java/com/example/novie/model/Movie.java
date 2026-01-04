@@ -41,11 +41,11 @@ public class Movie {
     @Setter @Getter
     private LocalDateTime updatedAt;
 
-    // MovieId
+    // CategoryId
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonIgnore
     @Getter @Setter
-    private Movie movie;
+    private Category category;
 
 }
