@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"password","userProfile","recipeList","categoryList"})
+@ToString(exclude = {"password","userProfile"})
 @Entity
 @Table(name="users")
 public class User {
