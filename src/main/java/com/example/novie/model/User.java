@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
-
+@Data
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"password","userProfile"})
+@ToString(exclude = {"password","userProfile","recipeList","categoryList"})
 @Entity
 @Table(name="users")
 public class User {
@@ -25,12 +26,13 @@ public class User {
 
 
     @JsonProperty(access =JsonProperty.Access.WRITE_ONLY)
-    @JoinColumn(name = "profile_id",referencedColumnName = "id")
     private String password;
 
 
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id",referencedColumnName = "id")
     private UserProfile userProfile;
+
 
 
     @JsonIgnore

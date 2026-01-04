@@ -3,8 +3,8 @@ package com.example.novie.security;
 
 
 
-import com.HW.Todo.model.User;
-import com.HW.Todo.service.UserService;
+import com.example.novie.model.User;
+import com.example.novie.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

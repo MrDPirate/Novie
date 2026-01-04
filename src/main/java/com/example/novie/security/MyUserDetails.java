@@ -1,9 +1,8 @@
 package com.example.novie.security;
 
-import com.HW.Todo.model.User;
+import com.example.novie.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.HashSet;
 
