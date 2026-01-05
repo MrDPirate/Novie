@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
-   private UserProfileRepository userProfileRepository;
 
     @PutMapping("/{profileId}/image")
     public ResponseEntity<?> updateProfileImage(
@@ -32,8 +31,8 @@ public class UserProfileController {
     }
     @GetMapping("/{profileId}/image")
     public ResponseEntity<byte[]> getProfileImage(@PathVariable Long profileId) {
-        UserProfile profile = userProfileRepository.findById(profileId)
-                .orElseThrow();
+
+        UserProfile profile = userProfileService.getProfile(profileId);
 
         return ResponseEntity.ok()
                 .header("Content-Type", profile.getImageType())

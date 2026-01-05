@@ -25,4 +25,9 @@ public class UserProfileService {
 
         return userProfileRepository.save(profile);
     }
+
+    public UserProfile getProfile(Long profileId) {
+        return userProfileRepository.findById(profileId)
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
+    }
 }
