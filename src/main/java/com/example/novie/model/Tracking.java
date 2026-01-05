@@ -3,11 +3,10 @@ package com.example.novie.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,10 +28,16 @@ public class Tracking {
     @Column
     private String status;
 
-    // MovieId
-    @ManyToMany
-    @JoinColumn(name = "movie_id")
     @JsonIgnore
-    private Movie movie;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
+
+    // Movie relations
+    @ManyToMany
+    @JoinTable(name = "tracking_movies",
+            joinColumns = @JoinColumn(name = "tracking_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id"))
+    private Set<Movie> movies = new HashSet<>();
 
 }
