@@ -7,7 +7,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,37 +17,30 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "movies")
+@Getter
+@Setter
 public class Movie {
 
     // movieId
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
     private Long id;
 
     // Name
     @Column
-    @Getter @Setter private String name;
+    private String name;
 
-    // CreatedAt
     @Column
-    @CreationTimestamp
-    @Setter @Getter
-    private LocalDateTime createdAt;
+    private String description;
 
-    // UpdatedAt
     @Column
-    @UpdateTimestamp
-    @Setter @Getter
-    private LocalDateTime updatedAt;
+    private Year year;
 
     // CategoryId
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonIgnore
-    @Getter @Setter
     private Category category;
 
 }

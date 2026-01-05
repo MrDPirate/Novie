@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,10 +44,7 @@ public class Category {
     private LocalDateTime updatedAt;
 
     // MovieId
-    @ManyToOne
-    @JoinColumn(name = "movie_id")
-    @JsonIgnore
-    @Getter @Setter
-    private Movie movie;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "category", orphanRemoval = true)
+    @Getter @Setter private List<Movie> movieList;
 
 }

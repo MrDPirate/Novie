@@ -15,37 +15,24 @@ import java.time.LocalDateTime;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tracking")
+@Getter
+@Setter
 public class Tracking {
 
     // trackingId
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
     private Long id;
 
     // Status
     @Column
-    @Getter @Setter private String status;
-
-    // CreatedAt
-    @Column
-    @CreationTimestamp
-    @Setter @Getter
-    private LocalDateTime createdAt;
-
-    // UpdatedAt
-    @Column
-    @UpdateTimestamp
-    @Setter @Getter
-    private LocalDateTime updatedAt;
+    private String status;
 
     // MovieId
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "movie_id")
     @JsonIgnore
-    @Getter @Setter
     private Movie movie;
 
 }
