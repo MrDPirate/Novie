@@ -3,12 +3,12 @@ package com.example.novie.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,35 +16,29 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "categories")
-
+@Getter
+@Setter
 public class Category {
 
     // categoryId
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
     private Long id;
 
     // Name
     @Column
-    @Getter @Setter private String name;
+    private String name;
 
-    // CreatedAt
-    @Column
-    @CreationTimestamp
-    @Setter @Getter
-    private LocalDateTime createdAt;
 
-    // UpdatedAt
-    @Column
-    @UpdateTimestamp
-    @Setter @Getter
-    private LocalDateTime updatedAt;
 
     // MovieId
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "category", orphanRemoval = true)
-    @Getter @Setter private List<Movie> movieList;
+    private List<Movie> movieList;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "subCategories")
+    private Set<Movie> subCategoryMovies = new HashSet<>();
 
 }

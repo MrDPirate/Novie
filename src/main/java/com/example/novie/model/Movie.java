@@ -3,17 +3,15 @@ package com.example.novie.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"category", "subCategories", "trackings", "reviews", "wishlists"})
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "movies")
@@ -37,10 +35,29 @@ public class Movie {
     @Column
     private Year year;
 
-    // CategoryId
-    @ManyToOne
+    // CategoryId (main category)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     @JsonIgnore
     private Category category;
+
+    // Subcategories
+    @ManyToMany
+    @JoinTable(name = "movie_subcategories",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private Set<Category> subCategories = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "movies")
+    private Set<Tracking> trackings = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "movies")
+    private Set<Review> reviews = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "movies")
+    private Set<Wishlist> wishlists = new HashSet<>();
 
 }
