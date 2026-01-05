@@ -19,6 +19,11 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String imageName;
+    private String imageType;
+
+    @Column(name = "image_data", columnDefinition = "BYTEA")
+    private byte[] imageData;
 
 
 
