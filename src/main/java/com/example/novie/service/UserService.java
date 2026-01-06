@@ -71,5 +71,18 @@ public class UserService {
     }
 
 
+    public void changePassword(String oldPassword, String newPassword) {
 
+        User user =myUserDetails.getUser();
+        try {
+            if(passwordEncoder.matches(oldPassword, user.getPassword())){
+
+                user.setPassword(passwordEncoder.encode(newPassword));
+                userRepository.save(user);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }

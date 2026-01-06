@@ -1,14 +1,12 @@
 package com.example.novie.controller;
 
 import com.example.novie.model.User;
+import com.example.novie.model.request.ChangePasswordRequest;
 import com.example.novie.model.request.LoginRequest;
 import com.example.novie.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/auth/users")
@@ -30,5 +28,10 @@ public class UserController {
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
         System.out.println("calling loginUser ----->");;
         return userService.loginUser(loginRequest);
+    }
+    @PutMapping("/change-password")
+    public void changePassword(@RequestBody ChangePasswordRequest request){
+        System.out.println("calling change password in controller ========>");
+        userService.changePassword(request.getOldPass(), request.getNewPass() );
     }
 }
