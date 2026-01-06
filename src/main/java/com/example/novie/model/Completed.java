@@ -13,20 +13,17 @@ import java.util.Set;
 @ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "tracking")
+@Table(name = "completed")
 @Getter
 @Setter
-public class Tracking {
+public class Completed {
 
-    // trackingId
+    // completedId
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Status
-    @Column
-    private String status;
 
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
@@ -35,8 +32,8 @@ public class Tracking {
 
     // Movie relations
     @ManyToMany
-    @JoinTable(name = "tracking_movies",
-            joinColumns = @JoinColumn(name = "tracking_id"),
+    @JoinTable(name = "completed_movies",
+            joinColumns = @JoinColumn(name = "completed_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id"))
     private Set<Movie> movies = new HashSet<>();
 
