@@ -21,14 +21,9 @@ public class AccountPasswordResetEmailContext extends AbstractEmailContext {
         put("token", token);
     }
 
-    public void buildResetUrl(final String baseURL, final String token) {
-        final String url = UriComponentsBuilder
-                .fromUriString(baseURL)
-                .path("/auth/users/reset-password")
-                .queryParam("token", token)
-                .toUriString();
-
+    public void buildResetUrl(final String baseURL, final String token){
+        final String url= UriComponentsBuilder.fromHttpUrl(baseURL)
+                .path("/auth/users/reset-password").queryParam("token", token).toUriString();
         put("resetURL", url);
     }
-
 }

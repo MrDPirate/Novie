@@ -3,7 +3,7 @@ package com.example.novie.service;
 
 import com.example.novie.model.SecureToken;
 import com.example.novie.repository.SecureTokenRepository;
-import java.util.Base64;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.keygen.BytesKeyGenerator;
@@ -20,24 +20,15 @@ public class DefaultSecureTokenService implements SecureTokenService{
     @Autowired
     SecureTokenRepository secureTokenRepository;
 
-
     @Override
     public SecureToken createToken() {
-
-        byte[] keyBytes = DEFAULT_TOKEN_GENERATOR.generateKey();
-
-        String tokenValue = Base64.getUrlEncoder()
-                .withoutPadding()
-                .encodeToString(keyBytes);
-
-        SecureToken secureToken = new SecureToken();
+        String tokenValue = new String(Base64.encodeBase64URLSafeString(DEFAULT_TOKEN_GENERATOR.generateKey()));
+        SecureToken secureToken=new SecureToken();
         secureToken.setToken(tokenValue);
-        secureToken.setExpireAt(
-                LocalDateTime.now().plusSeconds(tokenValidityInSeconds)
-        );
-
+        secureToken.setExpireAt(LocalDateTime.now().plusSeconds(tokenValidityInSeconds));
         this.saveSecureToken(secureToken);
         return secureToken;
+
     }
 
     @Override

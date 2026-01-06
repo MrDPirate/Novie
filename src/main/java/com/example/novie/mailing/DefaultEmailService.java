@@ -1,5 +1,4 @@
 package com.example.novie.mailing;
-
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +38,7 @@ public class DefaultEmailService implements EmailService {
             String emailContent =
                     templateEngine.process(email.getTemplateLocation(), context);
 
+            System.out.println("email sent from ---->" + fromEmail);
             helper.setTo(email.getTo());
             helper.setSubject(email.getSubject());
             helper.setFrom(fromEmail);
