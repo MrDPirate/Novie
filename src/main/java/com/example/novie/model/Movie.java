@@ -50,7 +50,7 @@ public class Movie {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "movies")
-    private Set<Tracking> trackings = new HashSet<>();
+    private Set<Completed> completedSet = new HashSet<>();
 
     @JsonIgnore
     @ManyToMany(mappedBy = "movies")
