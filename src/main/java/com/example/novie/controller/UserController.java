@@ -24,14 +24,24 @@ public class UserController {
         return userService.createUser(userObject);
     }
 
+
+
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest){
         System.out.println("calling loginUser ----->");;
         return userService.loginUser(loginRequest);
     }
+
     @PutMapping("/change-password")
     public void changePassword(@RequestBody ChangePasswordRequest request){
         System.out.println("calling change password in controller ========>");
         userService.changePassword(request.getOldPass(), request.getNewPass() );
+    }
+    @GetMapping("/register/verify")
+    public void validate(@RequestParam String token){
+        System.out.println("calling change password in controller ========>");
+        userService.validate(token);
+        System.out.println("blahblah");
+
     }
 }

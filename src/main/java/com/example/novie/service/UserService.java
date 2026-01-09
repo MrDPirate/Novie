@@ -1,12 +1,16 @@
 package com.example.novie.service;
 
 import com.example.novie.exception.InformationExistException;
+import com.example.novie.mailing.AccountVerificationEmailContext;
+import com.example.novie.mailing.EmailService;
+import com.example.novie.model.SecureToken;
 import com.example.novie.model.User;
 import com.example.novie.model.request.LoginRequest;
 import com.example.novie.model.response.LoginResponse;
 import com.example.novie.repository.UserRepository;
 import com.example.novie.security.JWTUtils;
 import com.example.novie.security.MyUserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +28,11 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private MyUserDetails myUserDetails;
 
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    private SecureTokenService secureTokenService;
 
 
     private UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder,JWTUtils jwtUtils,
@@ -42,12 +51,27 @@ public class UserService {
         if (!userRepository.existsByEmailAddress(userObject.getEmailAddress())){
             userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
 
-            return userRepository.save(userObject);
+            User result = userRepository.save(userObject);
+            sendConfirmationEmail(userObject);
+            return result;
         }else {
             throw new InformationExistException("User already exist");
         }
     }
 
+
+    public void sendConfirmationEmail(User user) {
+        SecureToken secureToken = secureTokenService.createToken();
+        secureToken.setUser(user);
+        secureTokenService.saveSecureToken(secureToken);
+        AccountVerificationEmailContext context = new AccountVerificationEmailContext();
+        context.init(user);
+        context.setToken(secureToken.getToken());
+        context.buildVerificationUrl("http://localhost:8080/", secureToken.getToken());
+
+        System.out.println("sending email to " + user.getEmailAddress());
+        emailService.sendMail(context);
+    }
     public User findUserByEmailAddress(String email){
         return userRepository.findUserByEmailAddress(email);
     }
@@ -84,5 +108,12 @@ public class UserService {
             throw new RuntimeException(e);
         }
 
+    }
+
+      public void validate(String token) {
+        SecureToken secureToken = secureTokenService.findByToken(token);
+        User user = secureToken.getUser();
+        user.setAccountVerified(true);
+        userRepository.save(user);
     }
 }
