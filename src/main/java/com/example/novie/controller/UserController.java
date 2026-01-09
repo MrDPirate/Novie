@@ -45,10 +45,23 @@ public class UserController {
         System.out.println("calling change password in controller ========>");
         userService.changePassword(request.getOldPass(), request.getNewPass() );
     }
-    @GetMapping("/register/verify")
-    public void validate(@RequestParam String token){
-        System.out.println("calling change password in controller ========>");
-        userService.validate(token);
 
+//    @GetMapping("/register/verify")
+//    public void validate(@RequestParam String token){
+//        System.out.println("calling change password in controller ========>");
+//        userService.validate(token);
+//
+//    }
+    @GetMapping("/reset-password")
+    public void passwordReset(@RequestBody User user){
+    System.out.println("calling reset in controller ========>");
+    userService.resetPassword(user.getEmailAddress());
     }
+    @PostMapping("/reset-password")
+    public void passwordResetActivator(@RequestBody User user ,@RequestParam String token){
+        System.out.println("calling reset activator in controller ========>");
+        userService.resetPasswordActivator(token,user);
+        //userService.resetPassword(user.getEmailAddress());
+    }
+
 }
