@@ -1,6 +1,8 @@
 package com.example.novie.controller;
 
+import com.example.novie.model.Completed;
 import com.example.novie.model.User;
+import com.example.novie.model.Wishlist;
 import com.example.novie.model.request.ChangePasswordRequest;
 import com.example.novie.model.request.LoginRequest;
 import com.example.novie.service.UserService;
@@ -21,9 +23,15 @@ public class UserController {
     @PostMapping("/register")
     public User createUser(@RequestBody User userObject){
         System.out.println("Calling create user");
+        Wishlist wishlist =new Wishlist();
+        wishlist.setUser(userObject);
+        userObject.setWishlist(wishlist);
+        Completed completed = new Completed();
+        completed.setUser(userObject);
+        userObject.setCompleted(completed);
         return userService.createUser(userObject);
-    }
 
+    }
 
 
     @PostMapping("/login")
@@ -41,7 +49,6 @@ public class UserController {
     public void validate(@RequestParam String token){
         System.out.println("calling change password in controller ========>");
         userService.validate(token);
-        System.out.println("blahblah");
 
     }
 }
