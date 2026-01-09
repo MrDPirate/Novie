@@ -5,6 +5,7 @@ import com.example.novie.model.User;
 import com.example.novie.model.Wishlist;
 import com.example.novie.model.request.ChangePasswordRequest;
 import com.example.novie.model.request.LoginRequest;
+import com.example.novie.model.request.ResetPasswordRequest;
 import com.example.novie.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -53,15 +54,15 @@ public class UserController {
 
     }
     @GetMapping("/resetPassword")
-    public void passwordReset(@RequestBody User user){
+    public void passwordReset(@RequestBody() ResetPasswordRequest emailAddress){
     System.out.println("calling reset Password from controller ========>");
-    userService.resetPassword(user.getEmailAddress());
+    userService.resetPassword(emailAddress.getEmailAddress());
     }
     @PostMapping("/resetPassword")
     public void passwordResetActivator(@RequestBody User user ,@RequestParam String token){
         System.out.println("reset Password  activator from controller ========>");
         userService.resetPasswordActivator(token,user);
-        //userService.resetPassword(user.getEmailAddress());
+
     }
 
 }
