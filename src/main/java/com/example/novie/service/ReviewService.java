@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReviewService {
     private ReviewRepository reviewRepository;
@@ -28,15 +30,28 @@ public class ReviewService {
     //Create Review
     public Review createReview(Review reviewObject){
         System.out.println("Service Calling createReview ==>");
-        Review review = reviewRepository.findByUserId(getCurrentLoggedInUser().getId())
-                .orElseThrow(()->
-                        new InformationExistException("User already has a Completed"));
-
         reviewObject.setUser(getCurrentLoggedInUser());
         return reviewRepository.save(reviewObject);
     }
 
-    //Get By movie Id
+    //Get By movie id
+    public List<Review> getReviewByMovieId(Long movieId){
+            System.out.println("Service Calling getReviewByUserId ==>");
+            return reviewRepository.findByMovieId(getCurrentLoggedInUser().getId());
+    }
 
     //Get by user id
+    public Review getReviewByUserId(){
+        System.out.println("Service Calling getReviewByUserId ==>");
+        return reviewRepository.findByUserId(getCurrentLoggedInUser().getId())
+                .orElseThrow(()->
+                        new InformationExistException("User did not review any code"));
+    }
+    //Get by review id
+    public Review getReview(Long id){
+        System.out.println("Service Calling getReviewByUserId ==>");
+        return reviewRepository.findById(id).orElseThrow(()->
+                new InformationExistException("No review with this id"));
+    }
+    //Delete review by id
 }
