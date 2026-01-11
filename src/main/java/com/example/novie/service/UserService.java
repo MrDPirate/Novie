@@ -1,6 +1,7 @@
 package com.example.novie.service;
 
 import com.example.novie.exception.InformationExistException;
+import com.example.novie.mailing.AccountPasswordResetEmailContext;
 import com.example.novie.mailing.AccountVerificationEmailContext;
 import com.example.novie.mailing.EmailService;
 import com.example.novie.model.SecureToken;
@@ -114,6 +115,28 @@ public class UserService {
         SecureToken secureToken = secureTokenService.findByToken(token);
         User user = secureToken.getUser();
         user.setAccountVerified(true);
+        userRepository.save(user);
+    }
+
+    public void resetPassword(String emailAddress) {
+        SecureToken secureToken = secureTokenService.createToken();
+        User user = userRepository.findUserByEmailAddress(emailAddress);
+        System.out.println("service found user ====> " + user.getUserName());
+        secureToken.setUser(user);
+        secureTokenService.saveSecureToken(secureToken);
+        AccountPasswordResetEmailContext context = new AccountPasswordResetEmailContext();
+        context.init(user);
+        context.setToken(secureToken.getToken());
+        context.buildResetUrl("http://localhost:8080/", secureToken.getToken());
+
+        System.out.println("sending email to " + user.getEmailAddress());
+        emailService.sendMail(context);
+    }
+
+    public void resetPasswordActivator(String token, User userObj) {
+        SecureToken secureToken = secureTokenService.findByToken(token);
+        User user = secureToken.getUser();
+        user.setPassword(passwordEncoder.encode(userObj.getPassword()));
         userRepository.save(user);
     }
 }
