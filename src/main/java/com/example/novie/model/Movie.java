@@ -53,7 +53,7 @@ public class Movie {
     private Set<Completed> completedSet = new HashSet<>();
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "movies")
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
     @JsonIgnore
