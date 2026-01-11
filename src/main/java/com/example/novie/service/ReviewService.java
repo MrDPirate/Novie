@@ -3,8 +3,10 @@ package com.example.novie.service;
 import com.example.novie.exception.InformationExistException;
 import com.example.novie.exception.InformationNotFoundException;
 import com.example.novie.model.Completed;
+import com.example.novie.model.Movie;
 import com.example.novie.model.Review;
 import com.example.novie.model.User;
+import com.example.novie.repository.MovieRepository;
 import com.example.novie.repository.ReviewRepository;
 import com.example.novie.security.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.util.List;
 @Service
 public class ReviewService {
     private ReviewRepository reviewRepository;
+    private MovieRepository movieRepository;
 
     @Autowired
     public void setReviewRepository(ReviewRepository reviewRepository){
@@ -29,9 +32,12 @@ public class ReviewService {
     }
 
     //Create Review
-    public Review createReview(Review reviewObject){
+    public Review createReview(Long movieId,Review reviewObject){
         System.out.println("Service Calling createReview ==>");
         reviewObject.setUser(getCurrentLoggedInUser());
+        Movie movie = movieRepository.findById(movieId)
+                .orElseThrow(()->new InformationNotFoundException("No movie with this id"));
+        reviewObject.setMovie(movie);
         return reviewRepository.save(reviewObject);
     }
 
