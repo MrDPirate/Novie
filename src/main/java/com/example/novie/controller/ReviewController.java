@@ -18,7 +18,7 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PostMapping(path = "{movieId}/review")
+    @PostMapping(path = "{movieId}/reviews")
     public Review createReview(@PathVariable(value = "movieId") Long movieId,@RequestBody Review reviewObject) {
         System.out.println("Controller Calling createReview ==>");
         return reviewService.createReview(movieId,reviewObject);
