@@ -1,6 +1,7 @@
 package com.example.novie.service;
 
 import com.example.novie.exception.InformationExistException;
+import com.example.novie.exception.InformationNotFoundException;
 import com.example.novie.model.Completed;
 import com.example.novie.model.Review;
 import com.example.novie.model.User;
@@ -41,17 +42,38 @@ public class ReviewService {
     }
 
     //Get by user id
-    public Review getReviewByUserId(){
+    public List<Review> getReviewByUserId(){
         System.out.println("Service Calling getReviewByUserId ==>");
-        return reviewRepository.findByUserId(getCurrentLoggedInUser().getId())
-                .orElseThrow(()->
-                        new InformationExistException("User did not review any code"));
+        return reviewRepository.findByUserId(getCurrentLoggedInUser().getId());
     }
+
     //Get by review id
     public Review getReview(Long id){
         System.out.println("Service Calling getReviewByUserId ==>");
         return reviewRepository.findById(id).orElseThrow(()->
                 new InformationExistException("No review with this id"));
     }
+
+    //Get by user and movie
+    public List<Review> getReviewByUserIdAndMovieId(Long movieId){
+        System.out.println("Service Calling getReviewByUserIdAndMovieId ==>");
+        return reviewRepository.findByUserIdAndMovieId(getCurrentLoggedInUser().getId(),movieId);
+    }
+
     //Delete review by id
+    public Review deleteReview(Long id){
+        System.out.println("Service Calling deleteReview ==>");
+        Review review = reviewRepository.findById(id).orElseThrow(()->
+                new InformationExistException("No review with this id"));
+        reviewRepository.deleteById(id);
+        return review;
+    }
+
+    //Mass delete
+    public List<Review> massDeleteReview(List<Long> reviewIds){
+        System.out.println("Service Calling massDeleteReview ==>");
+        List<Review> reviewList = reviewRepository.findAllById(reviewIds);
+        reviewRepository.deleteAllById(reviewIds);
+        return reviewList;
+    }
 }
