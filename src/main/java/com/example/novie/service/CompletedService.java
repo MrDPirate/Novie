@@ -28,7 +28,7 @@ public class CompletedService {
     //Create
     public Completed createCompleted(Completed completedObject){
         System.out.println("Service Calling createCompleted ==>");
-        Completed completed = completedRepository.findByUserId(getCurrentLoggedInUser().getId())
+        completedRepository.findByUserId(getCurrentLoggedInUser().getId())
                 .orElseThrow(()->
                         new InformationExistException("User already has a Completed"));
 
