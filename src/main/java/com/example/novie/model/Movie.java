@@ -11,7 +11,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"category", "subCategories", "trackings", "reviews", "wishlists"})
+@ToString(exclude = {"category", "subCategories", "completedSet", "reviews", "wishlists"})
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "movies")
@@ -36,9 +36,9 @@ public class Movie {
     private Year year;
 
     // CategoryId (main category)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @JsonIgnore
+//    @JsonIgnore
     private Category category;
 
     // Subcategories

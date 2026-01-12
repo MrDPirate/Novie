@@ -41,8 +41,11 @@ public class MovieService {
         }
 
         // Attach MAIN category
+        System.out.println("will call set category");
         if (movieObject.getCategory() != null) {
+            System.out.println("Service got Category ==>");
             Long categoryId = movieObject.getCategory().getId();
+            System.out.println("Got id " + categoryId);
             Category category = categoryRepository.findById(categoryId)
                     .orElseThrow(() ->
                             new InformationNotFoundException(
@@ -50,6 +53,7 @@ public class MovieService {
                             )
                     );
             movieObject.setCategory(category);
+            System.out.println("set category");
         }
 
         // Attach SUB categories
