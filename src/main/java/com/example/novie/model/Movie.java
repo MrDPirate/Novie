@@ -26,7 +26,7 @@ public class Movie {
     private Long id;
 
     // Name
-    @Column
+    @Column(unique = true)
     private String name;
 
     @Column
@@ -42,7 +42,7 @@ public class Movie {
     private Category category;
 
     // Subcategories
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "movie_subcategories",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))

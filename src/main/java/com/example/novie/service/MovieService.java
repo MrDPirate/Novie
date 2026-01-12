@@ -1,25 +1,72 @@
 package com.example.novie.service;
 
 import com.example.novie.exception.InformationNotFoundException;
+import com.example.novie.model.Category;
 import com.example.novie.model.Movie;
+import com.example.novie.repository.CategoryRepository;
 import com.example.novie.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class MovieService {
 
     private MovieRepository movieRepository;
+    private CategoryRepository categoryRepository;
+
 
     @Autowired
     public void setMovieRepository(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
+    @Autowired
+    public void setCategoryRepository(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
+
+
     // Create a new Movie
     public Movie createMovie(Movie movieObject) {
+        System.out.println("Service Calling createMovie ==>");
+        // Prevent duplicate movie name
+        if (movieRepository.existsByNameIgnoreCase(movieObject.getName())) {
+            throw new IllegalArgumentException(
+                    "Movie already exists with name: " + movieObject.getName()
+            );
+        }
+
+        // Attach MAIN category
+        if (movieObject.getCategory() != null) {
+            Long categoryId = movieObject.getCategory().getId();
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() ->
+                            new InformationNotFoundException(
+                                    "Category not found with id: " + categoryId
+                            )
+                    );
+            movieObject.setCategory(category);
+        }
+
+        // Attach SUB categories
+        Set<Category> managedSubCategories = new HashSet<>();
+
+        for (Category subCat : movieObject.getSubCategories()) {
+            Category managed = categoryRepository.findById(subCat.getId())
+                    .orElseThrow(() ->
+                            new InformationNotFoundException(
+                                    "Subcategory not found with id: " + subCat.getId()
+                            )
+                    );
+            managedSubCategories.add(managed);
+        }
+
+        movieObject.setSubCategories(managedSubCategories);
+
         return movieRepository.save(movieObject);
     }
 
