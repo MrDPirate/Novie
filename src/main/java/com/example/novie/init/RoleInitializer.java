@@ -4,15 +4,17 @@ import com.example.novie.model.Role;
 import com.example.novie.model.RoleName;
 import com.example.novie.repository.RoleRepository;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+
+@Component
+@RequiredArgsConstructor
 public class RoleInitializer {
 
     private final RoleRepository roleRepository;
 
 
-    public RoleInitializer(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
 
     @PostConstruct
     public void init() {

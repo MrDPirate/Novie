@@ -4,10 +4,13 @@ import com.example.novie.exception.InformationExistException;
 import com.example.novie.mailing.AccountPasswordResetEmailContext;
 import com.example.novie.mailing.AccountVerificationEmailContext;
 import com.example.novie.mailing.EmailService;
+import com.example.novie.model.Role;
+import com.example.novie.model.RoleName;
 import com.example.novie.model.SecureToken;
 import com.example.novie.model.User;
 import com.example.novie.model.request.LoginRequest;
 import com.example.novie.model.response.LoginResponse;
+import com.example.novie.repository.RoleRepository;
 import com.example.novie.repository.UserRepository;
 import com.example.novie.security.JWTUtils;
 import com.example.novie.security.MyUserDetails;
@@ -25,6 +28,7 @@ import org.springframework.security.core.Authentication;
 public class UserService {
     private final UserRepository userRepository;
     private  final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
     private final JWTUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private MyUserDetails myUserDetails;
@@ -36,7 +40,7 @@ public class UserService {
     private SecureTokenService secureTokenService;
 
 
-    private UserService(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder,JWTUtils jwtUtils,
+    private UserService(UserRepository userRepository,RoleRepository roleRepository, @Lazy PasswordEncoder passwordEncoder,JWTUtils jwtUtils,
                         @Lazy AuthenticationManager authenticationManager,
                         @Lazy MyUserDetails myUserDetails){
         this.userRepository = userRepository;
@@ -44,6 +48,7 @@ public class UserService {
         this.jwtUtils =jwtUtils;
         this.authenticationManager=authenticationManager;
         this.myUserDetails = myUserDetails;
+        this.roleRepository=roleRepository;
 
     }
 
@@ -52,6 +57,10 @@ public class UserService {
         if (!userRepository.existsByEmailAddress(userObject.getEmailAddress())){
             userObject.setPassword(passwordEncoder.encode(userObject.getPassword()));
 
+            Role userRole = roleRepository.findByName(RoleName.ROLE_USER).orElseThrow(
+                    ()->    new RuntimeException("ROLE_USER does not exist")
+            );
+            userObject.getRoles().add(userRole);
             User result = userRepository.save(userObject);
             sendConfirmationEmail(userObject);
             return result;
