@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"password", "userProfile", "wishlist", "tracking", "reviews"})
+@ToString(exclude = {"password", "userProfile", "wishlist", "completed", "reviews"})
 @Entity
 @Table(name="users")
 public class User {

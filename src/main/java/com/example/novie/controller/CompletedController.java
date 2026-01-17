@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/api/users/tracking/")
+@RequestMapping(path = "/api/users/completed")
 public class CompletedController {
     private CompletedService completedService;
 

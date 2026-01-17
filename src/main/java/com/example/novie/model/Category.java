@@ -1,6 +1,7 @@
 package com.example.novie.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"movieList", "subCategoryMovies"})
 @ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)

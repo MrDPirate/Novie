@@ -11,7 +11,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"category", "subCategories", "trackings", "reviews", "wishlists"})
+@ToString(exclude = {"category", "subCategories", "completedSet", "reviews", "wishlists"})
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "movies")
@@ -26,7 +26,7 @@ public class Movie {
     private Long id;
 
     // Name
-    @Column
+    @Column(unique = true)
     private String name;
 
     @Column
@@ -36,13 +36,13 @@ public class Movie {
     private Year year;
 
     // CategoryId (main category)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
-    @JsonIgnore
+//    @JsonIgnore
     private Category category;
 
     // Subcategories
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "movie_subcategories",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
@@ -53,7 +53,7 @@ public class Movie {
     private Set<Completed> completedSet = new HashSet<>();
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "movies")
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new HashSet<>();
 
     @JsonIgnore
