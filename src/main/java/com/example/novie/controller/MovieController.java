@@ -3,6 +3,7 @@ package com.example.novie.controller;
 import com.example.novie.model.Movie;
 import com.example.novie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class MovieController {
 
     // Create a Movie
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public Movie createMovie(@RequestBody Movie movieObject) {
         return movieService.createMovie(movieObject);
     }
@@ -46,6 +48,7 @@ public class MovieController {
 
     // Delete Movie
     @DeleteMapping("/{movieId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteMovie(@PathVariable Long movieId) {
         movieService.deleteMovie(movieId);
     }
