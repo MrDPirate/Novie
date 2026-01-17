@@ -42,6 +42,7 @@ public class MovieController {
 
     // Update Movie
     @PutMapping("/{movieId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public Movie updateMovie(@PathVariable Long movieId, @RequestBody Movie movieObject) {
         return movieService.updateMovie(movieId, movieObject);
     }

@@ -39,6 +39,7 @@ public class CategoryController {
     }
 
     // Update Category
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{categoryId}")
     public Category updateCategory(@PathVariable Long categoryId, @RequestBody Category categoryObject) {
         return categoryService.updateCategory(categoryId, categoryObject);
