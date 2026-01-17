@@ -3,6 +3,7 @@ package com.example.novie.controller;
 import com.example.novie.model.Category;
 import com.example.novie.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class CategoryController {
     }
 
     // Create Category
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Category createCategory(@RequestBody Category categoryObject) {
         return categoryService.createCategory(categoryObject);
@@ -43,6 +45,7 @@ public class CategoryController {
     }
 
     // Delete Category
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{categoryId}")
     public void deleteCategory(@PathVariable Long categoryId) {
         categoryService.deleteCategory(categoryId);
