@@ -13,7 +13,7 @@ import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"movieList", "subCategoryMovies"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "movieList", "subCategoryMovies"})
 @ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)
