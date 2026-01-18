@@ -96,10 +96,38 @@ public class MovieService {
         existingMovie.setName(movieObject.getName());
         existingMovie.setDescription(movieObject.getDescription());
         existingMovie.setYear(movieObject.getYear());
-        existingMovie.setCategory(movieObject.getCategory());
-        existingMovie.setSubCategories(movieObject.getSubCategories());
 
-        return movieRepository.save(existingMovie);
+        // Attach MAIN category (fetch from database)
+        if (movieObject.getCategory() != null) {
+            Long categoryId = movieObject.getCategory().getId();
+            Category category = categoryRepository.findById(categoryId)
+                    .orElseThrow(() ->
+                            new InformationNotFoundException(
+                                    "Category not found with id: " + categoryId
+                            )
+                    );
+            existingMovie.setCategory(category);
+        }
+
+        // Attach SUB categories (fetch from database)
+        Set<Category> managedSubCategories = new HashSet<>();
+        if (movieObject.getSubCategories() != null) {
+            for (Category subCat : movieObject.getSubCategories()) {
+                Category managed = categoryRepository.findById(subCat.getId())
+                        .orElseThrow(() ->
+                                new InformationNotFoundException(
+                                        "Subcategory not found with id: " + subCat.getId()
+                                )
+                        );
+                managedSubCategories.add(managed);
+            }
+        }
+        existingMovie.setSubCategories(managedSubCategories);
+
+        movieRepository.save(existingMovie);
+        
+        // Re-fetch to ensure all relationships are properly loaded
+        return getMovieById(movieId);
     }
 
     // Delete Movie

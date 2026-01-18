@@ -9,12 +9,12 @@ import java.util.Optional;
 
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
-    // Load subCategories eagerly when fetching all movies
-    @EntityGraph(attributePaths = {"subCategories"})
+    // Load category and subCategories eagerly when fetching all movies
+    @EntityGraph(attributePaths = {"category", "subCategories"})
     List<Movie> findAll();
 
-    // Load subCategories eagerly when fetching by ID
-    @EntityGraph(attributePaths = {"subCategories"})
+    // Load category and subCategories eagerly when fetching by ID
+    @EntityGraph(attributePaths = {"category", "subCategories"})
     Optional<Movie> findById(Long id);
 
     // Duplicate movie prevention

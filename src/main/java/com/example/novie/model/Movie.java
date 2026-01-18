@@ -1,6 +1,7 @@
 package com.example.novie.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(exclude = {"category", "subCategories", "completedSet", "reviews", "wishlists"})
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "movies")

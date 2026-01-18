@@ -25,6 +25,11 @@ public class ReviewService {
         this.reviewRepository=reviewRepository;
     }
 
+    @Autowired
+    public void setMovieRepository(MovieRepository movieRepository){
+        this.movieRepository=movieRepository;
+    }
+
     private static User getCurrentLoggedInUser(){
         MyUserDetails userDetails =
                 (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
