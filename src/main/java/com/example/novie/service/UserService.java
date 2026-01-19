@@ -160,4 +160,25 @@ public class UserService {
         user.setActive(false);
         userRepository.save(user);
     }
+
+    public void promoteUserToAdmin(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Role adminRole = roleRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("ADMIN role not found"));
+
+
+        boolean alreadyAdmin = user.getRoles().stream()
+                .anyMatch(role -> role.getId().equals(2L));
+
+        if (alreadyAdmin) {
+            throw new RuntimeException("User is already an ADMIN");
+        }
+
+        user.getRoles().add(adminRole);
+        userRepository.save(user);
+    }
+
 }
