@@ -74,6 +74,12 @@ public class UserController {
         return ResponseEntity.ok("softDelete ");
     }
 
+    @PutMapping("/{userId}/promote")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> promoteUserToAdmin(@PathVariable Long userId) {
+        userService.promoteUserToAdmin(userId);
+        return ResponseEntity.ok("User promoted to ADMIN");
+    }
 
 
 
