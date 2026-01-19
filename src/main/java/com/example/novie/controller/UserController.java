@@ -9,6 +9,7 @@ import com.example.novie.model.request.ResetPasswordRequest;
 import com.example.novie.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,6 +42,7 @@ public class UserController {
         return userService.loginUser(loginRequest);
     }
 
+
     @PutMapping("/change-password")
     public void changePassword(@RequestBody ChangePasswordRequest request){
         System.out.println("calling change password in controller ========>");
@@ -64,5 +66,21 @@ public class UserController {
         userService.resetPasswordActivator(token,user);
 
     }
+
+    @PutMapping("/{userId}/soft-delete")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> softDeleteUser(@PathVariable Long userId) {
+        userService.softDeleteUser(userId);
+        return ResponseEntity.ok("softDelete ");
+    }
+
+    @PutMapping("/{userId}/promote")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> promoteUserToAdmin(@PathVariable Long userId) {
+        userService.promoteUserToAdmin(userId);
+        return ResponseEntity.ok("User promoted to ADMIN");
+    }
+
+
 
 }

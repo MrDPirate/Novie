@@ -46,4 +46,8 @@ public class MyUserDetails implements UserDetails {
     public User getUser() {
         return user;
     }
+
+    public boolean isActive() {
+        return user.isActive();
+    }
 }
