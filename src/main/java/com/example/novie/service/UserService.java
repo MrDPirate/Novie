@@ -1,6 +1,7 @@
 package com.example.novie.service;
 
 import com.example.novie.exception.InformationExistException;
+import com.example.novie.exception.InformationNotFoundException;
 import com.example.novie.mailing.AccountPasswordResetEmailContext;
 import com.example.novie.mailing.AccountVerificationEmailContext;
 import com.example.novie.mailing.EmailService;
@@ -146,6 +147,14 @@ public class UserService {
         SecureToken secureToken = secureTokenService.findByToken(token);
         User user = secureToken.getUser();
         user.setPassword(passwordEncoder.encode(userObj.getPassword()));
+        userRepository.save(user);
+    }
+
+    public void softDeleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new InformationNotFoundException("User not found"));
+
+        user.setActive(false);
         userRepository.save(user);
     }
 }
