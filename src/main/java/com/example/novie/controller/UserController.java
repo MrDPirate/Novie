@@ -41,6 +41,7 @@ public class UserController {
         return userService.loginUser(loginRequest);
     }
 
+
     @PutMapping("/change-password")
     public void changePassword(@RequestBody ChangePasswordRequest request){
         System.out.println("calling change password in controller ========>");
