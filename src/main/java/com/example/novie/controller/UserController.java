@@ -71,7 +71,10 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> softDeleteUser(@PathVariable Long userId) {
         userService.softDeleteUser(userId);
-        return ResponseEntity.ok("calling user soft Delete =======>");
+        return ResponseEntity.ok("softDelete ");
     }
+
+
+
 
 }

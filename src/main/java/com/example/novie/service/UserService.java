@@ -98,6 +98,9 @@ public class UserService {
                             loginRequest.getEmail(),loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             myUserDetails =(MyUserDetails) authentication.getPrincipal();
+            if (!myUserDetails.isActive()) {
+                throw new RuntimeException("Account is deactivated");
+            }
             final String JWT = jwtUtils.generateJwtToken(myUserDetails);
             return ResponseEntity.ok(new LoginResponse(JWT));
         } catch (Exception e) {
