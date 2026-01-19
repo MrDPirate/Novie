@@ -101,7 +101,9 @@ The REST API was designed following RESTful principles, providing intuitive endp
 | GET | `/api/profile/{profileId}/image` | Get profile image | Private (Authenticated Users) |
 
 ## 🗂️ Entity-Relationship Diagram (ERD)
-![ERD](https://i.imgur.com/w3NZnk4.png)
+![ERD]
+<img width="720" height="437" alt="image" src="https://github.com/user-attachments/assets/f3bd15e8-c13a-4bd2-8de2-a0ea74a713ad" />
+
 
 ## 📌 Project Management
 **Trello Board:** https://trello.com/b/SWz7nQkK/novie
