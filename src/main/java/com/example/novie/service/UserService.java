@@ -1,6 +1,7 @@
 package com.example.novie.service;
 
 import com.example.novie.exception.InformationExistException;
+import com.example.novie.exception.InformationNotFoundException;
 import com.example.novie.mailing.AccountPasswordResetEmailContext;
 import com.example.novie.mailing.AccountVerificationEmailContext;
 import com.example.novie.mailing.EmailService;
@@ -97,6 +98,9 @@ public class UserService {
                             loginRequest.getEmail(),loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             myUserDetails =(MyUserDetails) authentication.getPrincipal();
+            if (!myUserDetails.isActive()) {
+                throw new RuntimeException("Account is deactivated");
+            }
             final String JWT = jwtUtils.generateJwtToken(myUserDetails);
             return ResponseEntity.ok(new LoginResponse(JWT));
         } catch (Exception e) {
@@ -148,4 +152,33 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userObj.getPassword()));
         userRepository.save(user);
     }
+
+    public void softDeleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new InformationNotFoundException("User not found"));
+
+        user.setActive(false);
+        userRepository.save(user);
+    }
+
+    public void promoteUserToAdmin(Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Role adminRole = roleRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("ADMIN role not found"));
+
+
+        boolean alreadyAdmin = user.getRoles().stream()
+                .anyMatch(role -> role.getId().equals(2L));
+
+        if (alreadyAdmin) {
+            throw new RuntimeException("User is already an ADMIN");
+        }
+
+        user.getRoles().add(adminRole);
+        userRepository.save(user);
+    }
+
 }

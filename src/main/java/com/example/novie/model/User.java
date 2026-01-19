@@ -56,9 +56,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
-    @Column
+    @Column(nullable = false)
     private boolean accountVerified;
 
+    @Column(nullable = false)
+    private boolean isActive = true;
 
     @JsonIgnore
     public String getPassword(){
