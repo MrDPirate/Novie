@@ -197,6 +197,7 @@ public class DataSeeder {
                 Set<Role> adminRoles = new HashSet<>();
                 adminRoles.add(adminRole);
                 adminUser.setRoles(adminRoles);
+                adminUser.setAccountVerified(true);
                 userRepository.save(adminUser);
 
                 System.out.println("✓ Admin user created successfully");
@@ -219,6 +220,7 @@ public class DataSeeder {
                 Set<Role> mohammedRoles = new HashSet<>();
                 mohammedRoles.add(userRole);
                 mohammedUser.setRoles(mohammedRoles);
+                mohammedUser.setAccountVerified(true);
                 mohammedUser = userRepository.save(mohammedUser);
 
                 // Create user profile for Mueen (will be saved via cascade)
@@ -233,6 +235,7 @@ public class DataSeeder {
                 Set<Role> mueenRoles = new HashSet<>();
                 mueenRoles.add(userRole);
                 mueenUser.setRoles(mueenRoles);
+                mueenUser.setAccountVerified(true);
                 mueenUser = userRepository.save(mueenUser);
 
                 // Create sample reviews from Mohammed
